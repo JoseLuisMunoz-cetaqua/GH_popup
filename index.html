@@ -1,145 +1,105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario Popup</title>
-    <style>
-        body {
-            background-color: #28a745; /* Fondo verde */
-            font-family: Calibri, sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suscripción</title>
 
-        /* Estilos del popup */
-        #popup {
-            display: flex; /* Mostrar el popup inmediatamente */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000; /* Asegura que el popup esté por encima del contenido */
-        }
+<style>
+    /* La página entera solo sirve de soporte para centrar la ventana */
+    body{
+        margin:0;
+        font-family:Calibri, sans-serif;
+        height:100vh;                /* alto completo */
+        display:flex;                /* centrado flex */
+        justify-content:center;
+        align-items:center;
+        background:transparent;      /* sin color de fondo */
+    }
 
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 300px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
+    /* Ventana */
+    .popup-content{
+        width:300px;
+        padding:20px;
+        background:#fff;
+        border-radius:10px;
+        box-shadow:0 4px 10px rgba(0,0,0,.3);
+        text-align:center;
+        position:relative;
+    }
 
-        .popup-content h2 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #333;
-        }
+    .popup-content h2{
+        font-size:18px;
+        margin:0 0 10px;
+        color:#333;
+    }
 
-        .popup-content input {
-            width: 90%;
-            padding: 8px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .popup-content input{
+        width:90%;
+        padding:8px;
+        margin:10px 0;
+        border:1px solid #ccc;
+        border-radius:5px;
+    }
 
-        .popup-content button {
-            padding: 12px;
-            background-color: #28a745; /* Verde */
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 5px;
-        }
+    .popup-content button{
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:5px;
+        cursor:pointer;
+        background:#28a745;
+        color:#fff;
+    }
 
-        .popup-content button:hover {
-            background-color: #218838;
-        }
+    .popup-content button:hover{ background:#218838; }
 
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: transparent;
-            border: none;
-            color: #888;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .close-btn:hover {
-            color: #333;
-        }
-    </style>
+    /* Botón cerrar (opcional) */
+    .close-btn{
+        position:absolute;
+        top:5px;
+        right:5px;
+        border:none;
+        background:transparent;
+        font-size:18px;
+        color:#888;
+        cursor:pointer;
+    }
+    .close-btn:hover{ color:#333; }
+</style>
 </head>
-<body>
 
-    <!-- Popup -->
-    <div id="popup">
-        <div class="popup-content">
-            <button class="close-btn" id="closePopup">&times;</button>
-            <h2>¡Suscríbete!</h2>
-            <p>Ingresa tu correo para recibir actualizaciones.</p>
-            <input type="email" id="email" placeholder="Tu correo aquí">
-            <button onclick="submitEmail()">Enviar</button>
-        </div>
+<body>
+    <div class="popup-content">
+        <button class="close-btn" onclick="document.body.removeChild(this.parentElement)">&times;</button>
+        <h2>¡Suscríbete!</h2>
+        <p>Ingresa tu correo para recibir actualizaciones.</p>
+
+        <input type="email" id="email" placeholder="Tu correo aquí">
+        <button onclick="submitEmail()">Enviar</button>
     </div>
 
-    <script>
-        // Mostrar el popup inmediatamente al cargar la página
-        window.onload = function() {
-            document.getElementById('popup').style.display = 'flex'; // Mostrar popup
-        };
+<script>
+function submitEmail(){
+    const email=document.getElementById('email').value.trim();
+    if(!email){
+        alert('Por favor ingresa un correo válido.'); return;
+    }
 
-        // Función para enviar el correo y agregarlo al Google Sheets usando Google Forms
-        function submitEmail() {
-            var email = document.getElementById('email').value;
-            if (email) {
-                // Enviar el correo al formulario de Google
-                submitToGoogleForm(email);
+    // --- AJUSTA ESTOS DOS VALORES A TU FORM DE GOOGLE ---
+    const formUrl='https://docs.google.com/forms/d/e/1FAIpQLSeJ8rQZCkCH-HTaH9QheWLZ4E4erLm3J4gJ4i0eYXj8bb6Y7w/formResponse';
+    const fieldId ='entry.123456789';     // Id del campo “Correo”
 
-                // Cerrar el popup
-                document.getElementById('popup').style.display = 'none';
-                alert("Gracias por tu correo: " + email); // Mensaje de agradecimiento
-            } else {
-                alert("Por favor ingresa un correo válido.");
-            }
-        }
+    const data=new FormData();
+    data.append(fieldId,email);
 
-        // Función para enviar los datos al Google Form
-        function submitToGoogleForm(email) {
-            var formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeJ8rQZCkCH-HTaH9QheWLZ4E4erLm3J4gJ4i0eYXj8bb6Y7w/formResponse";  // Reemplaza con tu URL del Google Form
-            var formData = new FormData();
-            formData.append("entry.123456789", email); // Reemplaza "entry.123456789" con el ID de tu campo de correo en Google Forms
+    fetch(formUrl,{method:'POST',body:data})
+        .then(r=>console.log(r.ok?'Correo enviado':'Error al enviar'))
+        .catch(()=>console.error('Error de red'));
 
-            fetch(formUrl, {
-                method: "POST",
-                body: formData
-            }).then(function(response) {
-                if (response.ok) {
-                    console.log("Correo enviado correctamente.");
-                } else {
-                    console.error("Hubo un error al enviar el correo.");
-                }
-            });
-        }
-
-        // Cerrar el popup
-        document.getElementById('closePopup').onclick = function() {
-            document.getElementById('popup').style.display = 'none'; // Ocultar popup
-        };
-    </script>
-
+    alert(`Gracias por tu correo: ${email}`);
+}
+</script>
 </body>
 </html>
+
