@@ -1,8 +1,130 @@
-<div id="popup">
-    <div class="popup-content">
-        <h2>Por favor ingresa tu correo</h2>
-        <input type="email" id="email" placeholder="Ingresa tu correo" required>
-        <button onclick="submitEmail()">Continuar</button>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup de Correo</title>
 
+    <style>
+        /* Estilo general para el cuerpo */
+        body {
+            background-color: #28a745; /* Fondo verde claro */
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Estilos del popup */
+        #popup {
+            display: none; /* Ocultar popup por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Asegura que esté encima de todo */
+        }
+
+        /* Estilo del contenido dentro del popup */
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px; /* Ventana con un tamaño adecuado */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .popup-content h2 {
+            font-family: Calibri, sans-serif;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .popup-content input {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .popup-content button {
+            padding: 12px;
+            background-color: #28a745; /* Verde más intenso */
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .popup-content button:hover {
+            background-color: #218838; /* Verde oscuro al pasar el mouse */
+        }
+
+        /* Botón de cerrar el popup */
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: transparent;
+            border: none;
+            color: #888;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Popup con formulario -->
+    <div id="popup">
+        <div class="popup-content">
+            <button class="close-btn" id="closePopup">&times;</button>
+            <h2>¡Suscríbete!</h2>
+            <p>Ingresa tu correo para recibir actualizaciones.</p>
+            <input type="email" id="email" placeholder="Tu correo aquí">
+            <button onclick="submitEmail()">Enviar</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Mostrar el popup inmediatamente al cargar la página
+        window.onload = function() {
+            document.getElementById('popup').style.display = 'flex'; // Mostrar popup
+        };
+
+        // Función para enviar el correo y ocultar el popup
+        function submitEmail() {
+            var email = document.getElementById('email').value;
+            if (email) {
+                alert("Gracias por tu correo: " + email);
+                document.getElementById('popup').style.display = 'none'; // Ocultar popup
+            } else {
+                alert("Por favor ingresa un correo válido.");
+            }
+        }
+
+        // Cerrar el popup al hacer clic en el botón de cerrar
+        document.getElementById('closePopup').onclick = function() {
+            document.getElementById('popup').style.display = 'none'; // Ocultar popup
+        };
+    </script>
+
+</body>
+</html>
