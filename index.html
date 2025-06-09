@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popup de Correo</title>
-
+    <title>Formulario Popup</title>
     <style>
-        /* Estilo general para el cuerpo */
         body {
-            background-color: #28a745; /* Fondo verde claro */
+            background-color: #28a745; /* Fondo verde */
             font-family: Calibri, sans-serif;
             margin: 0;
             height: 100vh;
@@ -20,7 +18,7 @@
 
         /* Estilos del popup */
         #popup {
-            display: none; /* Ocultar popup por defecto */
+            display: flex; /* Mostrar el popup inmediatamente */
             position: fixed;
             top: 0;
             left: 0;
@@ -29,22 +27,19 @@
             background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Asegura que esté encima de todo */
+            z-index: 1000; /* Asegura que el popup esté por encima del contenido */
         }
 
-        /* Estilo del contenido dentro del popup */
         .popup-content {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            width: 300px; /* Ventana con un tamaño adecuado */
+            width: 300px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            position: relative;
         }
 
         .popup-content h2 {
-            font-family: Calibri, sans-serif;
             font-size: 18px;
             margin-bottom: 15px;
             color: #333;
@@ -60,7 +55,7 @@
 
         .popup-content button {
             padding: 12px;
-            background-color: #28a745; /* Verde más intenso */
+            background-color: #28a745; /* Verde */
             color: white;
             border: none;
             cursor: pointer;
@@ -69,10 +64,9 @@
         }
 
         .popup-content button:hover {
-            background-color: #218838; /* Verde oscuro al pasar el mouse */
+            background-color: #218838;
         }
 
-        /* Botón de cerrar el popup */
         .close-btn {
             position: absolute;
             top: 5px;
@@ -91,7 +85,7 @@
 </head>
 <body>
 
-    <!-- Popup con formulario -->
+    <!-- Popup -->
     <div id="popup">
         <div class="popup-content">
             <button class="close-btn" id="closePopup">&times;</button>
@@ -102,25 +96,46 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
     <script>
         // Mostrar el popup inmediatamente al cargar la página
         window.onload = function() {
             document.getElementById('popup').style.display = 'flex'; // Mostrar popup
         };
 
-        // Función para enviar el correo y ocultar el popup
+        // Función para enviar el correo y agregarlo al Google Sheets usando Google Forms
         function submitEmail() {
             var email = document.getElementById('email').value;
             if (email) {
-                alert("Gracias por tu correo: " + email);
-                document.getElementById('popup').style.display = 'none'; // Ocultar popup
+                // Enviar el correo al formulario de Google
+                submitToGoogleForm(email);
+
+                // Cerrar el popup
+                document.getElementById('popup').style.display = 'none';
+                alert("Gracias por tu correo: " + email); // Mensaje de agradecimiento
             } else {
                 alert("Por favor ingresa un correo válido.");
             }
         }
 
-        // Cerrar el popup al hacer clic en el botón de cerrar
+        // Función para enviar los datos al Google Form
+        function submitToGoogleForm(email) {
+            var formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeJ8rQZCkCH-HTaH9QheWLZ4E4erLm3J4gJ4i0eYXj8bb6Y7w/formResponse";  // Reemplaza con tu URL del Google Form
+            var formData = new FormData();
+            formData.append("entry.123456789", email); // Reemplaza "entry.123456789" con el ID de tu campo de correo en Google Forms
+
+            fetch(formUrl, {
+                method: "POST",
+                body: formData
+            }).then(function(response) {
+                if (response.ok) {
+                    console.log("Correo enviado correctamente.");
+                } else {
+                    console.error("Hubo un error al enviar el correo.");
+                }
+            });
+        }
+
+        // Cerrar el popup
         document.getElementById('closePopup').onclick = function() {
             document.getElementById('popup').style.display = 'none'; // Ocultar popup
         };
